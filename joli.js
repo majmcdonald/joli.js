@@ -392,6 +392,13 @@ joli.Models.prototype = {
     });
   },
 
+  drop: function() {
+ 	joli.each(this.models, function(model, modelName) {
+  		var query = 'DROP TABLE IF EXISTS ' + modelName;
+		joli.connection.execute(query);
+	});
+  },
+
   migrate: function(version, migrationCallback) {
     // create migration table
     var query = 'CREATE TABLE IF NOT EXISTS ' + this.migration.table + ' (version)';
