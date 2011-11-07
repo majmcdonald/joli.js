@@ -754,6 +754,14 @@ joli.record = function(table) {
   };
   this._data = {};
   this._metadata = {};
+  joli.each(this._options.columns, function(colType, colName) {
+    Object.defineProperty(this, colName , {
+      get: function() { return this._data[colName]; },
+      set: function(newValue) { this._data[colName] = newValue;},
+      enumerable : true,
+      configurable : true
+    });
+  }, this);
 };
 
 joli.record.prototype = {
