@@ -440,7 +440,8 @@ joli.query = function() {
     select_columns:  '*',
     set:             [],
     values:          [],
-    where:           null
+    where:           null,
+    as:              null
   };
 };
 
@@ -483,6 +484,11 @@ joli.query.prototype = {
 
   from: function(table) {
     this.data.from = table;
+    return this;
+  },
+
+  as: function(table) {
+    this.data.as = table;
     return this;
   },
 
@@ -623,7 +629,9 @@ joli.query.prototype = {
     var i;
     var record;
     var rowData;
-    var model = joli.models.get(this.data.from);
+
+    // use the model specified by as() first, then from()
+    var model = joli.models.get(this.data.as || this.data.from);
 
     while (rows.isValidRow()) {
       i = 0;
@@ -714,7 +722,7 @@ joli.query.prototype = {
       var i = 0;
 
       // replace question marks one at a time from the array
-      while (expression.indexOf('?') != -1 && value[i]) {
+      while (expression.indexOf('?') != -1 && value[i] !== undefined) {
         expression = expression.replace(/\?/i, '"' + value[i] + '"');
         i++;
       }
